@@ -31,14 +31,14 @@ def set_black(I):
         for col in range(w):
             if I[row,col][2] == 0:
                 I[row,col] = 255
-    
+
     return I
 
 def set_image(I,mask):
-    ROI = cv2.bitwise_and(I,I,mask=mask) 
+    ROI = cv2.bitwise_and(I,I,mask=mask)
     w = set_black(ROI)
     out = cv2.cvtColor(w, cv2.COLOR_BGR2RGB)
-    
+
     return out
 
 def remove_edge(I):
@@ -57,7 +57,7 @@ def remove_edge(I):
             cv2.floodFill(I, None, (col, 0), 0)
         if I[h-1, col] == 255:
             cv2.floodFill(I, None, (col, h-1), 0)
-    
+
     return I
 
 
@@ -68,15 +68,15 @@ def prep_shark(I):
     #
     #This outputs a black and white image of the most stand out colors.
 
-    # Sharpen or blur gives a worse image 
+    # Sharpen or blur gives a worse image
     #k = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
     #sharp = cv2.filter2D(noise, -1, k)
     #gray = cv2.GaussianBlur(noise, (7, 7), 0)
 
-    # Remove noise 
+    # Remove noise
     noise = cv2.fastNlMeansDenoisingColored(I, None, 10,10,7,21)
 
-    # convert to contrasty color space 
+    # convert to contrasty color space
     LUVim = cv2.cvtColor(noise, cv2.COLOR_BGR2LUV)
     Gim = cv2.cvtColor(LUVim, cv2.COLOR_BGR2GRAY)
     EQim = cv2.equalizeHist(Gim)
